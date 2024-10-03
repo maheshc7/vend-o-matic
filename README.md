@@ -98,6 +98,8 @@ The project uses `pytest` to run unit tests. Make sure all tests pass before dep
 
    ```bash
    pytest
+   # OR
+   python3 -m pytest
    ```
 
 Tests include scenarios for:

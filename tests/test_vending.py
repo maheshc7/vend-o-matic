@@ -5,6 +5,7 @@ client = TestClient(app)
 
 
 def test_insert_coin():
+    """Test inserting a valid coin into the vending machine."""
     response = client.put("/", json={'coin': 1})
     assert response.status_code == 204
     assert response.headers['X-Coins'] == '1'
@@ -12,11 +13,13 @@ def test_insert_coin():
 
 
 def test_insert_coin_error():
+    """Test inserting invalid coin(s) into the vending machine."""
     response = client.put("/", json={'coin': 2})
     assert response.status_code == 422
 
 
 def test_remove_coins():
+    """Test ejecting coins from the vending machine."""
     # Insert coin
     client.put("/", json={'coin': 1})
     # Remove coin
@@ -26,6 +29,7 @@ def test_remove_coins():
 
 
 def test_inventory():
+    """Test getting the stock of all items."""
     response = client.get("/inventory")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
@@ -33,6 +37,7 @@ def test_inventory():
 
 
 def test_dispense_item_success():
+    """Test successfully dispensing an item when conditions are met."""
     # Ensure there are no balance coins
     client.delete("/")
     # Insert three quarters
@@ -49,7 +54,8 @@ def test_dispense_item_success():
     assert response.headers['X-Inventory-Remaining'] == str(final_qty)
 
 
-def test_dispense_item_out_of_stock():
+def test_dispense_item_invalid():
+    """Test dispensing an item when it is invalid."""
     # Ensure there are no balance coins
     client.delete("/")
     # Insert single quarter
@@ -62,6 +68,7 @@ def test_dispense_item_out_of_stock():
 
 
 def test_dispense_item_insufficient_coins():
+    """Test dispensing an item when the coins are insufficient."""
     # Ensure there are no balance coins
     client.delete("/")
     # Insert single quarter
