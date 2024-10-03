@@ -60,7 +60,7 @@ To install and run the application, follow the steps below:
 Once dependencies are installed, you can run the application with the following command:
 
 ```bash
-uvicorn main:app --reload
+uvicorn app:app --reload
 ```
 
 This will start the FastAPI application with hot-reloading enabled, making it easy for development.
@@ -97,8 +97,6 @@ The project uses `pytest` to run unit tests. Make sure all tests pass before dep
 2. Run the tests:
 
    ```bash
-   pytest
-   # OR
    python3 -m pytest
    ```
 
