@@ -1,6 +1,8 @@
 import os
-from fastapi import FastAPI, HTTPException, status, Response
+import json
+from fastapi import Depends, FastAPI, HTTPException, Response, status
 from fastapi.responses import JSONResponse
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 from vending_machine import VendingMachine
@@ -60,3 +62,49 @@ def purchase_item(item_id: int):
         headers = {"X-Coins": str(balance_coins)}
 
         raise HTTPException(status_code=status_code, headers=headers)
+
+
+# Default inventory state
+DEFAULT_INVENTORY = {
+    "1": {
+        "name": "Cola",
+        "price": 2,
+        "stock": 5
+    },
+    "2": {
+        "name": "Pepsi",
+        "price": 2,
+        "stock": 5
+    },
+    "3": {
+        "name": "Sprite",
+        "price": 2,
+        "stock": 5
+    }
+}
+
+# Basic Authentication setup
+security = HTTPBasic()
+
+# Default admin credentials
+# TODO use .env to store credentials instead
+USERNAME = "admin"
+PASSWORD = "password123"
+
+
+def authenticate(credentials: HTTPBasicCredentials = Depends(security)):
+    if credentials.username != USERNAME or credentials.password != PASSWORD:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials
+
+
+@app.post("/inventory/reset")
+def reset_inventory(credentials: HTTPBasicCredentials = Depends(authenticate)):
+    # Reset the inventory to default
+    with open(data_file, "w", encoding="utf-8") as f:
+        json.dump(DEFAULT_INVENTORY, f)
+    return {"message": "Inventory has been reset to default."}
