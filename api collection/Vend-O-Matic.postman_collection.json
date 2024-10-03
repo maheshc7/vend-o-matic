@@ -104,6 +104,39 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Reset Inventory",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/inventory/reset",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"inventory",
+						"reset"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
