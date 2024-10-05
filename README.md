@@ -92,6 +92,7 @@ The project uses `pytest` to run unit tests. Make sure all tests pass before dep
 
    ```bash
    pip install pytest
+   pip install httpx
    ```
 
 2. Run the tests:
